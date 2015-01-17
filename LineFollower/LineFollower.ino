@@ -321,7 +321,8 @@ void spinRight ()
     midSensor = analogRead(2);
     rightSensor = analogRead(3) + rightDifference;
   } 
-  while (!(leftSensor > midSensor - 45 && leftSensor < midSensor + 45 && rightSensor > midSensor - 45 && rightSensor < midSensor + 45));
+  while (!(leftSensor > midSensor - 45 && leftSensor < midSensor + 45 && 
+    rightSensor > midSensor - 45 && rightSensor < midSensor + 45));
   
   digitalWrite(rightMotorForward, HIGH);
 }
@@ -349,7 +350,8 @@ void hardSpin ()
     midSensor = analogRead(2);
     rightSensor = analogRead(3) + rightDifference;
   } 
-  while (!(leftSensor > midSensor - 45 && leftSensor < midSensor + 45 && rightSensor > midSensor - 45 && rightSensor < midSensor + 45));
+  while (!(leftSensor > midSensor - 45 && leftSensor < midSensor + 45 && 
+    rightSensor > midSensor - 45 && rightSensor < midSensor + 45));
   
   digitalWrite (leftMotorReverse, LOW);
   digitalWrite(leftMotorForward, HIGH);
