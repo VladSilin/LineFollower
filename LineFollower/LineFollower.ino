@@ -11,7 +11,8 @@ int lighting = 4;
 int leftSensor, midSensor, rightSensor, periphLeft, periphRight;
 int leftDifference = 0, rightDifference = 0, centre = 0;
 
-int rightMotorSpeed = 3, leftMotorSpeed = 9, rightMotorForward = 7, leftMotorForward = 12, rightMotorReverse = 8, leftMotorReverse = 2;
+int rightMotorSpeed = 3, leftMotorSpeed = 9, rightMotorForward = 7, leftMotorForward = 12, 
+  rightMotorReverse = 8, leftMotorReverse = 2;
 int startSpeed = 55, scan = 20, threshold = 27;
 int left = startSpeed, right = startSpeed;
 
@@ -166,19 +167,26 @@ void setup()
 }
 
 /*
-This is the main method of the program. All of the processing takes place here. First, the values of the 3 central LDRs are read in.Next, the left 
-and right sensors are compared to the middle one with the use of their differences from the middle LDR. If the left or right sensors are are off 
-of the required calibrated value, speed ajustments are made for each motor to adjust the direction that the car is going in.
+This is the main method of the program. All of the processing takes place here. First, 
+the values of the 3 central LDRs are read in. Next, the left and right sensors are 
+compared to the middle one with the use of their differences from the middle LDR. If 
+the left or right sensors are are off of the required calibrated value, speed ajustments 
+are made for each motor to adjust the direction that the car is going in.
 
-Then, the peripheral LDR values are read in. The peripheral sensors are used mainly for right angle turns and maze solving. If black is detected on
-the left sensor, the corresponding boolean expression is switched to false and the time at which the detection occured is recorded. If the right 
-peripheral sensor sees black, a right turn is initiated right away, disregarding other circumstances. The next if structure checks
-if the sensors see white. If yes, other conditions are checked to decide the direction and method of turn to be initiated. As soon as white
-is seen, the millis () time is checked. If the sensors saw left less than 1 second ago, a left turn is initiated. Otherwise, a hard turn on the
-spot is intialized instead, since the car is assumed to have reached the end of the line. The following 2 else if's are added mainly as safeguards,
-since the car is designed to turn right without even taking into account the conditions described in the else if's. More specifically, reaching 
-white before attempting a turn is unnecessary. Also, in the situation when both peripheral sensors detect black (a t-intersection), the car always 
-defaults to a right hand turn, since it is designed to solve mazes using the right hand rule.
+Then, the peripheral LDR values are read in. The peripheral sensors are used mainly for 
+right angle turns and maze solving. If black is detected on the left sensor, the corresponding 
+boolean expression is switched to false and the time at which the detection occured is recorded. 
+If the right peripheral sensor sees black, a right turn is initiated right away, disregarding 
+other circumstances. The next if structure checks if the sensors see white. If yes, other 
+conditions are checked to decide the direction and method of turn to be initiated. As soon as 
+white is seen, the millis () time is checked. If the sensors saw left less than 1 second ago, 
+a left turn is initiated. Otherwise, a hard turn on the spot is intialized instead, since the 
+car is assumed to have reached the end of the line. The following 2 else if's are added mainly 
+as safeguards, since the car is designed to turn right without even taking into account the 
+conditions described in the else if's. More specifically, reaching white before attempting a 
+turn is unnecessary. Also, in the situation when both peripheral sensors detect black 
+(a t-intersection), the car always defaults to a right hand turn, since it is designed to 
+solve mazes using the right hand rule.
 
 Here is are the car's direction preferences:
 1. A right turn is always preferred over going straight or turning left
@@ -247,13 +255,16 @@ void loop()
       sawLeft = false;
       spinRight ();
     }
-    else if ((leftSensor+midSensor+rightSensor)/3 > whiteAvg - 15 && (leftSensor+midSensor+rightSensor)/3 < whiteAvg + 15) 
+    else if ((leftSensor+midSensor+rightSensor)/3 > whiteAvg - 15 && 
+      (leftSensor+midSensor+rightSensor)/3 < whiteAvg + 15) 
     {
       hardSpin ();
     }  
   }
   
-  if ((leftSensor+midSensor+rightSensor)/3 > stopAvg - 15 && (leftSensor+midSensor+rightSensor)/3 < stopAvg + 15) {
+  if ((leftSensor+midSensor+rightSensor)/3 > stopAvg - 15 && 
+    (leftSensor+midSensor+rightSensor)/3 < stopAvg + 15) 
+  {
     digitalWrite(rightMotorForward, LOW);
     digitalWrite(leftMotorForward, LOW);
   }
@@ -263,8 +274,9 @@ void loop()
 }
 
 /*
-This method is used to turn the car on right angle left turns. The left motor is stopped, so the car spins left on its left wheel until 
-the 3 middle censors reach the preferred values and the car is centered on the line.
+This method is used to turn the car on right angle left turns. The left motor is stopped, 
+so the car spins left on its left wheel until the 3 middle censors reach the preferred values 
+and the car is centered on the line.
 */
 void spinLeft ()
 {
@@ -282,14 +294,16 @@ void spinLeft ()
     midSensor = analogRead(2);
     rightSensor = analogRead(3) + rightDifference;
   } 
-  while (!(leftSensor > midSensor - 45 && leftSensor < midSensor + 45 && rightSensor > midSensor - 45 && rightSensor < midSensor + 45));
+  while (!(leftSensor > midSensor - 45 && leftSensor < midSensor + 45 && rightSensor > midSensor - 45 &&
+    rightSensor < midSensor + 45));
   
   digitalWrite(leftMotorForward, HIGH);
 }
 
 /*
-This method is used to turn the car on right angle right turns. The right motor is stopped, so the car spins right on its right wheel until 
-the 3 middle censors reach the preferred values and the car is centered on the line.
+This method is used to turn the car on right angle right turns. The right motor is stopped, 
+so the car spins right on its right wheel until the 3 middle censors reach the preferred values 
+and the car is centered on the line.
 */
 void spinRight ()
 {
@@ -313,9 +327,10 @@ void spinRight ()
 }
 
 /*
-This method is used to turn the car 180 degrees when white is detected by the 3 middle censors, signifying that the end of the line has
-been reached. One of the motors runs in reverse, while the other one keeps moving forward. This has the effect of turning the car more 
-sharply, with a smaller turn radius.
+This method is used to turn the car 180 degrees when white is detected by the 3 middle censors, 
+signifying that the end of the line has been reached. One of the motors runs in reverse, while 
+the other one keeps moving forward. This has the effect of turning the car more sharply, with 
+a smaller turn radius.
 */
 void hardSpin ()
 {
